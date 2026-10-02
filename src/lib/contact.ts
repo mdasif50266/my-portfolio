@@ -53,28 +53,21 @@ export function validateContact(
 }
 
 export async function submitContact(payload: ContactPayload) {
-  const { data, error } = await supabase
-    .from("contact_submissions")
-    .insert([
-      {
-        name: payload.name,
-        email: payload.email,
-        company: payload.company,
-        service: payload.service,
-        budget: payload.budget,
-        description: payload.description,
-      },
-    ])
-    .select()
-    .single();
+  const { error } = await supabase.from("contact_submissions").insert([
+    {
+      name: payload.name,
+      email: payload.email,
+      company: payload.company,
+      service: payload.service,
+      budget: payload.budget,
+      project_description: payload.description,
+    },
+  ]);
 
   if (error) {
     console.error("Supabase error:", error);
     throw new Error(error.message);
   }
 
-  return {
-    ok: true as const,
-    received: data,
-  };
+  return { ok: true as const };
 }
